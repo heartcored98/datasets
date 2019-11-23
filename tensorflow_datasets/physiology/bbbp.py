@@ -47,10 +47,10 @@ class Bbbp(tfds.core.GeneratorBasedBuilder):
             builder=self,
             description=_DESCRIPTION,
             features=tfds.features.FeaturesDict({
-                "smile": tfds.features.Text(),
+                "smiles": tfds.features.Text(),
                 "label":  tfds.features.ClassLabel(names=["0", "1"]),
             }),
-            supervised_keys=("smile", "label"),
+            supervised_keys=("smiles", "label"),
             homepage=_URL_,
             citation=_CITATION,
         )
@@ -76,6 +76,6 @@ class Bbbp(tfds.core.GeneratorBasedBuilder):
             reader = csv.DictReader(f)
             for _, row in enumerate(reader):
                 yield row['num'], {
-                    'smile': row['smiles'],
+                    'smiles': row['smiles'],
                     'label': row['p_np'],
                 }
