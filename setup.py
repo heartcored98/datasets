@@ -10,6 +10,7 @@ Usage outside of TensorFlow is also supported.
 See the README on GitHub for further documentation.
 """
 
+from version import __version__  # pylint: disable=g-import-not-at-top
 import datetime
 import itertools
 import os
@@ -29,7 +30,6 @@ project_name = 'tensorflow-datasets'
 version_path = os.path.join(
     os.path.dirname(__file__), 'tensorflow_datasets')
 sys.path.append(version_path)
-from version import __version__  # pylint: disable=g-import-not-at-top
 
 if nightly:
   project_name = 'tfds-nightly'
@@ -41,7 +41,7 @@ DOCLINES = __doc__.split('\n')
 
 REQUIRED_PKGS = [
     'absl-py',
-    'attrs',
+    'attrs>=18.1.0',
     'dill',  # TODO(tfds): move to TESTS_REQUIRE.
     'future',
     'numpy',
@@ -53,6 +53,14 @@ REQUIRED_PKGS = [
     'termcolor',
     'tqdm',
     'wrapt',
+    # Python 2 backports
+    'bz2file;python_version<"3"',
+    'functools32;python_version<"3"',
+    'futures;python_version<"3"',
+    # shutil.disk_usage was introduced in Python 3.3, use psutil instead.
+    'psutil;python_version<"3.3"',
+    # enum introduced in Python 3.4
+    'enum34;python_version<"3.4"'
 ]
 
 TESTS_REQUIRE = [
@@ -61,27 +69,11 @@ TESTS_REQUIRE = [
     'mako',
     'pytest',
     'pytest-xdist',
+    # Python 2 backports
+    'mock;python_version<"3"',
     # TODO(b/142892342): Re-enable
     # 'tensorflow-docs @ git+https://github.com/tensorflow/docs#egg=tensorflow-docs',  # pylint: disable=line-too-long
 ]
-
-if sys.version_info.major == 3:
-  # Packages only for Python 3
-  pass
-else:
-  # Packages only for Python 2
-  TESTS_REQUIRE.append('mock')
-  REQUIRED_PKGS.append('bz2file')
-  REQUIRED_PKGS.append('functools32')
-  REQUIRED_PKGS.append('futures')  # concurrent.futures
-
-if sys.version_info < (3, 4):
-  # enum introduced in Python 3.4
-  REQUIRED_PKGS.append('enum34')
-
-if sys.version_info < (3, 3):
-  # shutil.disk_usage was introduced in Python 3.3, use psutil instead.
-  REQUIRED_PKGS.append('psutil')
 
 # Static files needed by datasets.
 DATASET_FILES = [
@@ -94,8 +86,12 @@ DATASET_FILES = [
     'image/cbis_ddsm_patch_labels.txt',
     'image/dtd_key_attributes.txt',
     'image/food-101_classes.txt',
+    'image/imagenet_resized_labels.txt',
     'image/imagenet2012_labels.txt',
     'image/imagenet2012_validation_labels.txt',
+    'image/imagenette_labels.txt',
+    'image/inaturalist_labels.txt',
+    'image/inaturalist_supercategories.txt',
     'image/open_images_classes_all.txt',
     'image/open_images_classes_boxable.txt',
     'image/open_images_classes_trainable.txt',
@@ -114,10 +110,11 @@ DATASET_FILES = [
 DATASET_EXTRAS = {
     # In alphabetical order
     'aflw2k3d': ['scipy'],
+    'bbbp': ['rdkit'],
     'c4': ['apache_beam', 'langdetect', 'nltk', 'tldextract'],
     'cats_vs_dogs': ['matplotlib'],
     'colorectal_histology': ['Pillow'],
-    'eurosat': ['scikit-image',],
+    'eurosat': ['scikit-image', ],
     'groove': ['pretty_midi', 'pydub'],
     'imagenet2012_corrupted': [
         # This includes pre-built source; you may need to use an alternative
@@ -135,7 +132,7 @@ DATASET_EXTRAS = {
     'the300w_lp': ['scipy'],
     'duke_ultrasound': ['scipy'],
     'wider_face': ['Pillow'],
-    'wikipedia': ['mwparserfromhell', 'apache_beam'],
+    'wikipedia': ['mwparserfromhell', 'apache_beam']
 }
 
 
