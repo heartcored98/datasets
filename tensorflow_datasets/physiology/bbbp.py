@@ -125,7 +125,7 @@ class BBBP(tfds.core.GeneratorBasedBuilder):
                 "feature": tfds.features.Tensor(shape=(max_atoms, num_feature), dtype=tf.float64),
                 "adj": tfds.features.Tensor(shape=(max_atoms, max_atoms), dtype=tf.float64)
             },
-            "label":  tfds.features.ClassLabel(names=["0", "1"]),
+            "label": tfds.features.ClassLabel(names=["0", "1"])
         }),
         supervised_keys=("smiles", "label"),
         homepage=_URL_,
