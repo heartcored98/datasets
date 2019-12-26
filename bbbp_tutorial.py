@@ -12,5 +12,5 @@ dataset = tfds.load(name="bbbp", split=tfds.Split.TRAIN)
 dataset = dataset.shuffle(128).batch(
     32).prefetch(tf.data.experimental.AUTOTUNE)
 for features in dataset.take(1):
-  print(features)
-  print(features["graph"]["adj"].shape)
+  smile, label = features["smile"], features["label"]
+  print(smile, label)
